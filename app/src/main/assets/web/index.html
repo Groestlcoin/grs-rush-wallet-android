@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Groestlcoin JSwallet | Get your Groestlcoin wallet </title>
+	<meta name="description" content="GroestlCoin JSwallet is an instant cross-platform Groestlcoin wallet, controlled by you.">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css?v=15" rel="stylesheet">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="150x150" href="img/progress_lock.png">
+
+	<link href='https://fonts.googleapis.com/css?family=Jockey+One' rel='stylesheet' type='text/css'>
+    <meta name="google-site-verification" content="8u3Wv7IbIb-Z5Eip_dz6uGvvBx2YVxWIf41Y3gtuBz4" />
+    <link rel="apple-touch-icon" href="img/progress_lock.png" />
+
+    <style>
+        .container {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="banner navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <a class="brand" href="/">
+                <img src="img/progress_lock.png" alt="" style="margin-top: -4px; width: 35px; height: 35px;"> <span style="color:#6590a2"> <b> Groestlcoin JSwallet</b></span>
+            </a>
+            <div id="priceBox">
+                <div id="price"></div>
+                <div id="chartBox">
+                    <div id="chart24" style="width: 245px; height: 150px; padding: 0px; position: relative;margin:0 auto;"></div>
+                </div>
+            </div>
+         
+            <div id="settings"></div>
+            <div id="info"><span class="glyphicon glyphicon-info-sign"></span></div>
+        </div>
+    </nav>
+
+    <div id="generate">
+        <section class="dark">
+            <div class="container">
+				<!-- <button class="" id="passBtn"> <span class="hl">Create wallet with password</span> <span class="glyphicon"></span></button> -->
+
+
+				<div id="leadTxt">Drag your finger randomly inside the box until your new Groestlcoin wallet appears</div>
+
+
+				<div id="passBox">
+					
+					<div id="passBoxTxt">
+						<div class="KKCheck">
+							<div class="KKCheckInner"><span class="glyphicon glyphicon-ok" id="checkIcon"></span></div>	
+						</div> 
+						Create wallet with password
+					</div> 
+				</div>
+
+                <div id="tapBox" class="tapBox">
+                	<!--                     <img src="img/ripple.png" alt="" id="tapGif" width="150" class="tapBox">
+ -->
+
+ 					<div id="code"></div>
+					<div class="ripples" class="tapBox">  
+					  <div class="ripple ripple-1" class="tapBox"></div>
+					  <div class="ripple ripple-2" class="tapBox"></div>
+					  <div class="ripple ripple-3" class="tapBox"></div>
+					</div>
+
+                    <div id="progressLockBox">
+                        <div id="progressFill" ></div>
+                        <img style="background-color:transparent;" src="img/progress_lock.png" alt="" id="progressLockImg" class="tapBox" width="236">
+                    </div>
+
+                </div>
+
+
+
+                <div id="createPassword" class="bg-warning">
+
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="createPasswordTxt">
+                        <span class="input-group-btn">
+							<button type="button" class="btn btn-success" id="createWallet"  disabled="disabled">Create Wallet</button>
+			      		</span>
+                    </div>
+
+                </div>
+
+                <div id="openPassword" class="bg-warning">
+                    <!-- <label for="exampleInputEmail1">Please enter a password to open this wallet</label> -->
+
+
+					<div class="input-group">
+                        <input type="password" class="form-control" id="openPasswordTxt">
+                        <span class="input-group-btn">
+							<button type="button" class="btn btn-success" id="openWallet"  disabled="disabled">Open Wallet</button>
+			      		</span>
+                    </div>
+
+
+                </div>
+
+                <div class="alert alert-danger" id="loginError"></div>
+
+            </div>
+            <!-- <p><a href="address.php">Continue</a></p> -->
+        </section>
+    </div>
+
+    <div id="wallet" class="container">
+    	<div id="saveURL"><div>Make sure you bookmark this page to access your wallet in the future</div></div>
+
+    	<div id="addressBox">
+    	    <div id="addressTxt">Your Groestlcoin Address</div>
+    	    <span id="address"></span>
+
+    	</div>
+
+        <div id="walletInfo">
+            <div class="container">
+                <div class="">
+                    <div id="leftInfo">
+                        <div id="walletName"></div>
+                        <div class="balance">
+                            &#484; <span id="btcBalance"></span>
+                        </div>
+                        <div class="currency">
+                            <span id="currencyValue">USD</span> <span id="fiatValue"></span>
+                        </div>
+                    </div>
+                    <div class="qr-link">
+                        <img src="assets/img/qr.html" class="qrimage smallQR">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div id="tabButtons">
+            <a class="tabButton" id="receiveBoxBtn">
+                <img src="img/receive.png" alt="" class="btnIcon"> Receive</a>
+            <a class="tabButton" id="sendBoxBtn">
+                <img src="img/send.png" alt="" class="btnIcon" id="sendIcon"> Send</a>
+            <div class="clearfix"></div>
+        </div>
+
+        <div id="actions">
+            <div id="receiveBox">
+                <div class="actionText">Generate a payment request</div>
+
+				<div class="form-group">
+                   
+
+                    <div class="input-group">
+                        <!-- <span class="input-group-addon"><i class="fa fa-bitcoin"></i></span>-->
+                        <span class="input-group-addon" id="changeType2"><!--span class="glyphicon glyphicon-sort"></span--> <span class="addonBox2">&#484;</span> </span>
+
+                        <input class="form-control" placeholder="Amount" id="txtReceiveAmount" type="text" autocapitalize="off" autocorrect="off">
+                        <span class="input-group-btn">
+                        	<span id="fiatPrice2"></span>
+                			<a class="btn btn-success" id="generateBtn" disabled="disabled">Generate</a>				
+                        </span>
+
+                    </div>
+
+                 </div>
+
+             
+            </div>
+            <div id="sendBox">
+                <div class="actionText">Send</div>
+				<div class="alert alert-warning" id="errorBox">
+					<!-- <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> -->
+					<div id="errorTxt"></div>
+				</div>
+
+                <div class="form-group">
+                    <!-- <div id="reader" style="width:100px;height:100px">
+					 </div> -->
+                    <div class="input-group" style="width:100%">
+						
+                        <input type="text" class="form-control" placeholder="Receiving address" id="txtAddress" autocapitalize="off" autocorrect="off">
+                        <span class="input-group-addon"><a href="#" id="qrlink"><span class="glyphicon glyphicon-qrcode" id="qrscan"></span></a></span>
+                        <div id="oneNameInfo">
+                        	<div id="oneNameName"></div>
+                        	<div id="oneNameImg"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="changeType"><!--span class="glyphicon glyphicon-sort"></span--> <span class="addonBox">&#484;</span> </span>
+
+                        <input class="form-control" placeholder="Amount" id="txtAmount" type="text" autocapitalize="off" autocorrect="off">
+                        <span class="input-group-btn">
+                        	<span id="fiatPrice"></span>
+                			<a class="btn btn-success" id="sendBtn" disabled="disabled">Send</a>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <div class="container" id="txList">
+        <div id="txTitle">Transaction History</div>
+
+        <div class="break"></div>
+
+        <div id="noTx">No transactions</div>
+        <div class="table-responsive" id="txBox">
+            <table class="table table-hover" id="txTable">
+                <thead>
+                    <tr id="tableHeader">
+                        <th style="border-radius:7px 0 0 7px;">Date</th>
+                        <th class="hidden-sm hidden-xs">Tx ID</th>
+                        <th class="hidden-sm hidden-xs">Confirmations</th>
+
+                        <th style="border-radius:0 7px 7px 0; padding-right:40px; text-align:right;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="txBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+
+			<div class="modal fade" id="infoModal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+
+			            <div class="modal-body">
+			                <div class="modalBox orangeLinks">
+			                	<div class="modalTitle">
+			                		<div class="closeModal">
+			                			<span class="glyphicon glyphicon-remove"></span>
+			                		</div>
+			                		Help
+			                	</div>
+                                <div id="infoLogo"> <img src="img/progress_lock.png" alt="" style="margin-top: -4px; width: 35px; height: 35px;"> <span style="color:#6590a2"> <b>Groestlcoin JSwallet </b></span></div>
+			                	<div class="infoText">Groestlcoin JSwallet is an instant cross-platform Groestlcoin wallet. By not requiring annoying logins and passwords, Groestlcoin JSwallet makes Groestlcoin simple to setup and easy to use.</div>
+
+			                	<div class="infoTitle">Only you have control of your wallet and groestlcoin </div>
+			                	<div class="infoText">Groestlcoin JSwallet neither holds nor has access to your groestlcoin or private keys. All information is stored on the client-side, so only you have control of your wallet and your Groestlcoin.</div>
+
+			                	<div class="infoTitle">Your URL is Your Key</div>
+			                	<div class="infoText">Bookmark your walletâ€™s secret URL to access your Groestlcoin JSwallet in the future. Please note, this is your private URL so do not share it with anyone. <b>If you lose this URL your Groestlcoin will be lost forever.</b></div>
+
+			                	<div class="infoTitle">Add a password for extra security</div>
+			                	<div class="infoText">When creating your Groestlcoin JSwallet we offer the option to add a password to your account. You will need to enter this password every time you access your wallet. For your own security we do not store any customer data, so <strong>donâ€™t forget your password!</strong><br/><br/>
+								<i>Please note, all transactions sent from your wallet include a 0.0001 mining fee. This fee helps support the Groestlcoin network and ensures your transaction goes through quickly.</i>
+			                	</div>
+			                	<div class="infoTitle">Max send feature</div>
+			                	<div class="infoText">Type "max" or "all" in the send amount field to see the maximum amount you can send from your wallet.</div>
+								
+								<div class="infoTitle">Groestlcoin Price Indicator</div>
+			                	<div class="infoText">The Groestlcoin price shown in the top header is the <a href="http://bittrex.com/" target="_blank">Bittrex.com</a> price shown in USD.</div>
+
+                                <div class="infoTitle">What is a Groestlcoin JSwallet Payment Request?</div>
+                                <div class="infoText">This Groestlcoin JSwallet tool allows you to easily create and manage requests for payments. </div>
+                                
+			                	<div class="infoTitle">Contact Us</div>
+			                	<div class="infoText"><a href="mailto:groestlcoin@gmail.com" style="color: #F49500;">groestlcoin@gmail.com</a></div>
+
+
+			                </div>
+
+			                
+			            </div>
+			            
+			        </div>
+			        <!-- /.modal-content -->
+			    </div>
+			    <!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+
+	        <div class="modal fade" id="request">
+	            <div class="modal-dialog">
+	                <div class="modal-content">
+
+	                    <div class="modal-body">
+	                        <div class="modalBox">
+	                        	<div class="modalTitle">
+	                        		<div class="closeModal">
+	                        			<span class="glyphicon glyphicon-remove"></span>
+	                        		</div>
+	                        		Receive
+	                        	</div>
+
+	                        	<p>Requesting <span id="generateAmount"></span> GRS to:
+	                        	    <br>
+	                        	    <small><span id="generateAddress"></span></small>
+	                        	</p>
+	                        	<img src="assets/img/qr.html" class="qrimage" id="receiveQR">
+                                <br/>
+                                <!-- <a id="invoiceLinkReceive">Create a SmartRequest</a> <span class="glyphicon glyphicon-question-sign" id="requestHelp"></span> -->
+
+                                <div id="requestHelpText">
+                                    <p>SmartRequest is a decentralized Groestlcoin payment request system.</p>
+    
+                                    It can be used to raise funds as a crowdfunding initiative, to pool money together from multiple people, or to create a simple invoice for services rendered.
+                                </div>
+	                        </div>
+
+	                        
+	                    </div>
+	                    
+	                </div>
+	                <!-- /.modal-content -->
+	            </div>
+	            <!-- /.modal-dialog -->
+	        </div>
+	        <!-- /.modal -->
+
+
+
+	        <div class="modal fade" id="passwordInfoModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-body">
+                            <div class="modalBoxLeft">
+                                <div class="modalTitle">
+                                    <div class="closeModal">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </div>
+                                    Password Recommendations
+                                </div>
+
+                                <div class="orangeText">Your wallet is only as secure as your password</div>
+                                
+                                <div class="blueText">No minimum password length requirement</div>
+
+                                <div class="grayText">For ease of use, this is no minumum password length requirement. However, for increased security we recommend a password length of at least 8 characters. Using numbers, symbols, and a mix of upper and lower case letters in your password makes it harder for someone to guess your password.</div>
+
+                            </div>
+
+                            
+                        </div>
+                        
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
+            <div class="modal fade" id="settingsModal">
+	            <div class="modal-dialog">
+	                <div class="modal-content">
+
+	                    <div class="modal-body">
+	                        <div class="modalBox">
+	                        	<div class="modalTitle">
+	                        		<div class="closeModal">
+	                        			<span class="glyphicon glyphicon-remove"></span>
+	                        		</div>
+	                        		<div id="settingsTitle">
+                                        <span class="glyphicon glyphicon-chevron-left"></span>  
+                                        <span id="settingsTitleText">Settings</span>       
+                                    </div>
+
+	                        	</div>
+
+                                <div id="settingsChoices">
+                                    <div class="settingsChoice" id="choiceCurrency">
+                                        <div class="settingsChoiceIcon"></div>
+                                        <div class="settingsChoiceText">Set<br/>Currency</div>
+                                    </div>
+                                    <div class="settingsChoice" id="choiceMining">
+                                        <div class="settingsChoiceIcon"></div>
+                                        <div class="settingsChoiceText">Set<br/>Mining Fee</div>
+                                    </div>   
+
+                                   
+                                    <div class="settingsChoice" id="choiceExport">
+                                        <div class="settingsChoiceIcon"><span class="glyphicon glyphicon-export"></span></div>
+                                        <div class="settingsChoiceText">Export<br/> Keys</div>
+                                    </div>    
+                                    <div class="clearfix"></div> 
+
+                                    <!--div class="modalTitle">
+                                        
+                                        Tools <span class="betaTag">Beta</span>
+
+                                    </div-->   
+
+                                    <!--div class="settingsChoice" id="choiceSmartRequest">
+                                        <div class="settingsChoiceIcon"></div>
+                                        <div class="settingsChoiceText">Payment Request<br/>Manager</div>
+                                    </div>   
+
+                                    <div class="settingsChoice" id="choiceSmartFund">
+                                        <div class="settingsChoiceIcon"></div>
+                                        <div class="settingsChoiceText">Fundraiser <br/>Manager</div>
+                                    </div>         
+
+                                    <div class="clearfix"></div--> 
+                   
+                                </div>
+
+                                <div id="settingsCurrency">
+                                    <div class="form-group">
+                                      <label for="currencySelect">Active currency</label>
+                                      <select id="currencySelect" class="form-control">
+
+                                      </select>
+                                    </div>
+                                </div>
+
+                                <div id="importRequestBox">
+                                    <div>Import your <span class="invoiceType"></span> by entering the ID below</div>
+
+                                    <div id="importRequestBoxInner">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="importRequestID" placeholder="Enter ID">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-success" id="importRequestBtn"  disabled="disabled">Import</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div id="settingsInvoice">
+
+                                    <div class="orangeBox" id="newRequestMsg"></div>
+                                    <input type="hidden" value="" id="invoiceType">
+                                    <div id="invoiceCountLine">
+                                        <div id="leftCountLine"> 
+                                            Saved
+                                            <span style='color: #64657A;'>(<span id="invoiceCount">0</span>)</span>
+                                        </div>
+                                        <div id="rightCountLine">
+                                            <span class="importRequest">Import <span class="invoiceType"></span></span>
+                                            <button type="submit" class="btn btn-success" id="btnNewRequest">Create Request</button>
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                       
+                                    </div>
+
+                                    <div id="noInvoice">
+                                        <button class="btn btn-success" id="getStarted">Create a <span class="invoiceType"></span></button>
+                                        <div class="importRequest">Import <span class="invoiceType"></span></div>
+
+                                    </div>
+
+                                       
+                                    <div class="form-group" id="requestForm">
+                                        <label>Title</label>
+                                        <input type="text" class="form-control" placeholder="Title" id="txtInvoiceTitle">
+                                       
+                                        <label>Amount Requested</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Ç¤</span>
+                                            <input class="form-control" placeholder="Amount" id="txtInvoiceAmount" type="text" autocapitalize="off" autocorrect="off">
+                                        </div>
+
+                                        <label><span class="invoiceType"></span> ID</label>
+                                        <input type="text" class="form-control" placeholder="Invoice ID" id="txtInvoiceID">
+                                        
+                                        <div id="youtubeLinkBox">
+                                            <label>YouTube URL (optional)</label>
+                                            <input type="text" class="form-control" placeholder="Youtube Link" id="txtYoutube">
+                                        </div>
+
+                                        <label>Description (optional)</label>
+                                        <textarea  class="form-control" placeholder="Description" id="txtInvoiceDescription"></textarea>
+                                        <br/>
+                                        
+
+                                        <div>
+                                            <button type="submit" class="btn btn-success" id="btnCreateInvoice" disabled="disabled" style="float:left;">Create SmartRequest</button>
+                                            <div style="" id="cancelBtn">Cancel</div>
+                                            <div class="clearfix"></div>
+                                        </div>
+
+                                       
+                                        
+
+                                    </div>
+
+                                    <div class="table-responsive" id="invoiceTx" style="border:0;">
+                                        <table class="table table-hover" >
+                                            <thead>
+                                                <tr id="tableHeader">
+                                                    <th style="border-radius:7px 0 0 7px;">Title</th>
+                                                    <th>Request ID</th>
+
+                                                    <th style="" class="hidden-sm hidden-xs" id="headerBalance">Raised</th>
+                                                    <th style="" id="headerAmount">Goal</th>
+
+                                                    <th style="border-radius:0 7px 7px 0; padding-right:40px; text-align:right;width:100px;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="invoicesBody">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    
+                                     
+                                    
+                                 </div>
+
+
+                                <div id="settingsExport">
+                                    <div class="form-group">
+                                      <label>Brain Wallet</label>
+                                      <input type="text" class="form-control" id="txtBrain" readonly>                            
+    
+                                      <label>Private Key</label>
+                                      <input type="text" class="form-control" id="txtPrivate" readonly>
+                                      
+                                    </div>
+                                </div>
+
+                                <div id="settingsMining">
+                                    <div id="settingsMiningInfo">Groestlcoin JSWallet transactions are free of charge. However, sending too little or no mining fee can greatly impact the speed at which your transactions are confirmed. You may change the fee below to alter the default mining fee.</div>
+                                    
+                                    <div class="break"></div>
+                                    <div class="miningOption">
+                                        <div class="miningOptionLeft">
+                                            <div class="settingsOption" type="frugal"></div>
+                                            <div class="settingsOptionText">No Fee</div>
+                                        </div>
+                                        <div class="miningOptionRight">A miner fee  will not be included in the transaction. <span class="orangeText">Please note that transactions will be significantly slower to confirm. </span></div>
+                                        <div class="clearfix"></div>
+
+                                    </div>
+                                    
+                                    <div class="break"></div>
+
+                                    <div class="miningOption">
+                                        <div class="miningOptionLeft">
+                                            <div class="settingsOption" type="normal"></div>
+                                            <div class="settingsOptionText">Normal</div>
+                                        </div>
+                                        <div class="miningOptionRight"> The miner fee policy suggested by the standard Groestlcoin client will be used. <span class="blueText">Recommended.</span></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="break"></div>
+
+                                    <div class="miningOption">
+                                        <div class="miningOptionLeft">
+                                            <div class="settingsOption" type="generous"></div>
+                                            <div class="settingsOptionText">Generous</div>
+                                        </div>
+                                        <div class="miningOptionRight">A miner fee of 0.02 GRS will be used as to  ensure your transactions are processed quickly.</div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="break"></div>
+
+                                    <div class="miningOption">
+                                        <div class="miningOptionLeft">
+                                            <div class="settingsOption" type="custom"></div>
+                                            <div class="settingsOptionText">Custom</div>
+                                        </div>
+                                        <div class="miningOptionRight">
+                                            Set a custom miner fee.
+                                            <div class="form-group" id="feeHolder">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Ç¤</span>
+
+                                                    <input class="form-control" placeholder="Miner Fee" id="txtFeeAmount" type="text" autocapitalize="off" autocorrect="off">
+                                                
+                                                    <span id="fiatPriceFee"></span>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="break"></div>
+
+
+
+                                </div>
+                            
+
+                                
+	                        </div>
+
+	                        
+	                    </div>
+	                    
+	                </div>
+	                <!-- /.modal-content -->
+	            </div>
+	            <!-- /.modal-dialog -->
+	        </div>
+	        <!-- /.modal -->
+
+
+			<div class="modal fade" id="confirmModal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+
+			            <div class="modal-body" id="confirmBody">
+			                <div class="modalBox" id="confirmBox">
+			                	
+								<p>Confirm that you are sending</p>
+			                	<p id="confirmAmountLine"><span id="confirmAmount"></span> (GRS)</p>
+			                	<p>to the following address</p>
+			                	<div id="confirmAddress"></div>
+		                	    <small><span id="generateAddress"></span></small>
+			                </div>
+								<button class="btn btn-default closeConfirm" >Cancel</button> <button class="btn btn-success" id="confirmSend">Confirm</button>
+
+								<div id="minerTxt">Please note, this transaction includes a <span id="txFee"></span> mining fee</div>
+
+			                
+			            </div>
+			            
+			        </div>
+			        <!-- /.modal-content -->
+			    </div>
+			    <!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+
+
+    <audio id="noise"></audio>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.flot.min.js"></script>
+    <script src="js/jquery.flot.time.min.js"></script>
+    <script type="text/javascript" src="socket.io/socket.io.js"></script>   
+    <script src="js/bootstrap.min.js"></script>
+    <script src="grs.js"></script>
+    <script src="bitcoinjs.min.js"></script>
+    <script src="rw.js?v=15"></script>
+    <script src="app.js?v=15"></script>
+    <script src="tx.js"></script>
+    <script src="util.js"></script>
+    <script src="moment.js"></script>
+
+
+    <script>
+
+
+    </script>
+</body>
+
+</html>

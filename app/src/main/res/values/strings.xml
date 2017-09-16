@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Groestlcoin JSWallet</string>
+    <string name="saved_hash">saved_hash</string>
+</resources>

@@ -1,0 +1,481 @@
+<!doctype html>
+<html>
+<head>
+	<!--
+	Donation Address: 1NiNja1bUmhSoTXozBRBEtR8LeF9TGbZBN
+
+	Notice of Copyrights and Licenses:
+	***********************************
+	The bitaddress.org project, software and embedded resources are copyright bitaddress.org (pointbiz). 
+	The bitaddress.org name and logo are not part of the open source license.
+
+	Portions of the all-in-one HTML document contain JavaScript codes that are the copyrights of others. 
+	The individual copyrights are included throughout the document along with their licenses.
+	Included JavaScript libraries are separated with HTML script tags.
+
+	Summary of JavaScript functions with a redistributable license:
+	JavaScript function		License
+	*******************		***************
+	Array.prototype.map		Public Domain
+	window.Crypto			BSD License
+	window.SecureRandom		BSD License
+	window.EllipticCurve		BSD License
+	window.BigInteger		BSD License
+	window.QRCode			MIT License
+	window.Bitcoin			MIT License
+	window.Crypto_scrypt		MIT License
+
+	The bitaddress.org software is available under The MIT License (MIT)
+	Copyright (c) 2011-2013 bitaddress.org (pointbiz)
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+	associated documentation files (the "Software"), to deal in the Software without restriction, including 
+	without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
+	sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject 
+	to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all copies or substantial 
+	portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+	LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+	WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	GitHub Repository: https://github.com/pointbiz/bitaddress.org
+	-->
+
+	<title>Groestlcoin Wallet Generator</title>
+	<meta charset="utf-8">
+
+	<script type="text/javascript" src="Groestl512Hash/grs.js"></script>
+	<script type="text/javascript">
+//array.map.js
+	</script>
+	<script type="text/javascript">
+//cryptojs.js	
+	</script>
+	<script type="text/javascript">
+//cryptojs.sha256.js	
+	</script>
+	<script type="text/javascript">
+//cryptojs.pbkdf2.js 
+	</script>
+	<script type="text/javascript">
+//cryptojs.hmac.js
+	</script>
+	<script type="text/javascript">
+//cryptojs.aes.js
+	</script>
+	<script type="text/javascript">
+//cryptojs.blockmodes.js
+	</script>
+	<script type="text/javascript">
+//cryptojs.ripemd160.js
+	</script>
+	<script type="text/javascript">
+//securerandom.js
+	</script>
+	<script type="text/javascript">
+//ellipticcurve.js
+	</script>
+	<script type="text/javascript">
+//biginteger.js
+	</script>
+	<script type="text/javascript">
+//qrcode.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.base58.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.address.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.ecdsa.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.eckey.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.util.js
+	</script>
+	<script type="text/javascript">
+//crypto-scrypt.js
+	</script>
+	<style type="text/css">
+//main.css
+	</style>
+</head>
+<body onclick="SecureRandom.seedTime();" onmousemove="ninja.seeder.seed(event);">
+	<div id="busyblock"></div>
+	<div id="main">
+		<div id="culturemenu">
+			<span><a href="?culture=en" id="cultureen" class="selected">English</a></span> | 
+			<span><a href="?culture=es" id="culturees">Español</a></span> | 
+			<span><a href="?culture=fr" id="culturefr">Français</a></span> | 
+			<span><a href="?culture=el" id="cultureel">ελληνικά</a></span> | 
+			<span><a href="?culture=it" id="cultureit">italiano</a></span> | 
+			<span><a href="?culture=de" id="culturede">Deutsch</a></span> | 
+			<span><a href="?culture=cs" id="culturecs">Česky</a></span>
+		</div>
+		<img alt="groestlcoin.org" title="groestlcoin.org" id="logo" src="data:image/png;base64,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" />
+		<div id="tagline">Open Source JavaScript Client-Side Groestlcoin Wallet Generator</div>
+		<div id="seedpoolarea"><textarea rows="16" cols="62" id="seedpool"></textarea></div>
+		<div id="testnet"></div>
+		<div class="menu" id="menu">
+			<div class="tab selected" id="singlewallet" onclick="ninja.tabSwitch(this);">Single Wallet</div>
+			<div class="tab" id="paperwallet" onclick="ninja.tabSwitch(this);">Paper Wallet</div>
+			<div class="tab" id="bulkwallet" onclick="ninja.tabSwitch(this);">Bulk Wallet</div>
+			<div class="tab" id="brainwallet" onclick="ninja.tabSwitch(this);">Brain Wallet</div>
+			<div class="tab" id="vanitywallet" onclick="ninja.tabSwitch(this);">Vanity Wallet</div>
+			<div class="tab" id="detailwallet" onclick="ninja.tabSwitch(this);">Wallet Details</div>
+		</div>
+		
+		<div id="generate">
+			<span id="generatelabelbitcoinaddress">Generating Groestlcoin Address...</span><br />
+			<span id="generatelabelmovemouse">MOVE your mouse around to add some extra randomness... </span><span id="mousemovelimit"></span><br />
+			<span id="generatelabelkeypress">OR type some random characters into this textbox</span> <input type="text" id="generatekeyinput" onkeypress="ninja.seeder.seedKeyPress(event);" /><br />
+			<div id="seedpooldisplay"></div>
+		</div>
+
+		<div id="wallets">
+			<div id="singlearea" class="walletarea">
+				<div class="commands">
+					<div id="singlecommands" class="row">
+						<span><input type="button" id="newaddress" value="Generate New Address" onclick="ninja.wallets.singlewallet.generateNewAddressAndKey();" /></span>
+						<span class="print"><input type="button" name="print" value="Print" id="singleprint" onclick="window.print();" /></span>
+					</div>
+				</div>
+				<div id="keyarea" class="keyarea">
+					<div class="public">
+						<div class="pubaddress">
+							<span class="label" id="singlelabelbitcoinaddress">Groestlcoin Address</span>
+						</div>
+						<div id="qrcode_public" class="qrcode_public"></div>
+						<div class="pubaddress">
+							<span class="output" id="btcaddress"></span>
+						</div>
+						<div id="singleshare">SHARE</div>
+					</div>
+					<div class="private">
+						<div class="privwif">
+							<span class="label" id="singlelabelprivatekey">Private Key (Wallet Import Format)</span>
+						</div>
+						<div id="qrcode_private" class="qrcode_private"></div>
+						<div class="privwif">
+							<span class="output" id="btcprivwif"></span>
+						</div>
+						<div id="singlesecret">SECRET</div>
+					</div>				
+				</div>
+				
+				<div id="singlesafety">
+					<p id="singletip1"><b>A Groestlcoin wallet</b> is as simple as a single pairing of a Groestlcoin address with its corresponding Groestlcoin private key. Such a wallet has been generated for you in your web browser and is displayed above.</p>
+					<p id="singletip2"><b>To safeguard this wallet</b> you must print or otherwise record the Groestlcoin address and private key. It is important to make a backup copy of the private key and store it in a safe location. This site does not have knowledge of your private key. If you are familiar with PGP you can download this all-in-one HTML page and check that you have an authentic version from the author of this site by matching the SHA1 hash of this HTML with the SHA1 hash available in the signed version history document linked on the footer of this site. If you leave/refresh the site or press the "Generate New Address" button then a new private key will be generated and the previously displayed private key will not be retrievable.	Your Groestlcoin private key should be kept a secret. Whomever you share the private key with has access to spend all the groestlcoins associated with that address. If you print your wallet then store it in a zip lock bag to keep it safe from water. Treat a paper wallet like cash.</p>
+					<p id="singletip3"><b>Add funds</b> to this wallet by instructing others to send groestlcoins to your Groestlcoin address.</p>
+					<p id="singletip4"><b>Check your balance</b> by going to http://coinia.net/groestlcoin/getbalance.php and entering your Groestlcoin address.</p>
+					<p id="singletip5"><b>Spend your groestlcoins</b> by going to one of the exchanges and sweep the full balance of your private key into your account at their website. You can also spend your funds by downloading one of the popular groestlcoin p2p clients and importing your private key to the p2p client wallet. Keep in mind when you import your single key to a groestlcoin p2p client and spend funds your key will be bundled with other private keys in the p2p client wallet. When you perform a transaction your change will be sent to another groestlcoin address within the p2p client wallet. You must then backup the p2p client wallet and keep it safe as your remaining groestlcoins will be stored there. Satoshi advised that one should never delete a wallet.</p>
+				</div>
+			</div>
+
+			<div id="paperarea">
+				<div class="commands">
+					<div id="papercommands" class="row">
+						<span><label id="paperlabelhideart" for="paperart">Hide Art?</label> <input type="checkbox" id="paperart" onchange="ninja.wallets.paperwallet.toggleArt(this);" /></span>
+						<span><label id="paperlabeladdressestogenerate" for="paperlimit">Addresses to generate:</label> <input type="text" id="paperlimit" /></span>
+						<span><input type="button" id="papergenerate" value="Generate" onclick="ninja.wallets.paperwallet.build(document.getElementById('paperlimit').value * 1, document.getElementById('paperlimitperpage').value * 1, !document.getElementById('paperart').checked, document.getElementById('paperpassphrase').value);" /></span>
+						<span class="print"><input type="button" name="print" value="Print" id="paperprint" onclick="window.print();" /></span>
+					</div>
+					<div id="paperadvancedcommands" class="row extra">
+						<span><label id="paperlabelencrypt" for="paperencrypt">BIP38 Encrypt?</label> <input type="checkbox" id="paperencrypt" onchange="ninja.wallets.paperwallet.toggleEncrypt(this);" /></span>
+						<span><label id="paperlabelBIPpassphrase" for="paperpassphrase">Passphrase:</label> <input type="text" id="paperpassphrase" /></span>
+						<span><label id="paperlabeladdressesperpage" for="paperlimitperpage">Addresses per page:</label> <input type="text" id="paperlimitperpage" /></span>
+					</div>
+				</div>
+				<div id="paperkeyarea"></div>
+			</div>
+			
+			<div id="bulkarea" class="walletarea">
+				<div class="commands">
+					<div id="bulkcommands" class="row">
+						<span><label id="bulklabelstartindex" for="bulkstartindex">Start index:</label> <input type="text" id="bulkstartindex" value="1" /></span>
+						<span><label id="bulklabelrowstogenerate" for="bulklimit">Rows to generate:</label> <input type="text" id="bulklimit" value="3" /></span>
+						<span><label id="bulklabelcompressed" for="bulkcompressed">Compressed addresses?</label> <input type="checkbox" id="bulkcompressed" /></span>
+						<span><input type="button" id="bulkgenerate" value="Generate" onclick="ninja.wallets.bulkwallet.buildCSV(document.getElementById('bulklimit').value * 1, document.getElementById('bulkstartindex').value * 1, document.getElementById('bulkcompressed').checked);" /> </span>
+						<span class="print"><input type="button" name="print" id="bulkprint" value="Print" onclick="window.print();" /></span>
+					</div>
+				</div>
+				<div class="body">
+					<span class="label" id="bulklabelcsv">Comma Separated Values:</span> <span class="format" id="bulklabelformat">Index,Address,Private Key (WIF)</span>
+					<textarea rows="20" cols="88" id="bulktextarea"></textarea>
+				</div>
+				<div class="faqs">
+					<div id="bulkfaq1" class="faq"> 
+						<div id="bulkq1" class="question" onclick="ninja.wallets.bulkwallet.openCloseFaq(1);">
+							<span id="bulklabelq1">Why should I use a Bulk Wallet to accept groestlcoins on my website?</span>
+							<div id="bulke1" class="more"></div>
+						</div>
+						<div id="bulka1" class="answer">The traditional approach to accepting groestlcoins on your website requires that you install the official groestlcoin client daemon ("groestlcoind"). Many website hosting packages don't support installing the groestlcoin daemon. Also, running the groestlcoin daemon on your web server means your private keys are hosted on the server and could get stolen if your web server is hacked. When using a Bulk Wallet you can upload only the groestlcoin addresses and not the private keys to your web server. Then you don't have to worry about your groestlcoin wallet being stolen if your web server is hacked. </div>
+					</div>
+					<div id="bulkfaq2" class="faq"> 
+						<div id="bulkq2" class="question" onclick="ninja.wallets.bulkwallet.openCloseFaq(2);">
+							<span id="bulklabelq2">How do I use a Bulk Wallet to accept groestlcoins on my website?</span>
+							<div id="bulke2" class="more"></div>
+						</div>
+						<div id="bulka2" class="answer">
+							<ol>
+							<li id="bulklabela2li1">Use the Bulk Wallet tab to pre-generate a large number of groestlcoin addresses (10,000+). Copy and paste the generated comma separated values (CSV) list to a secure text file on your computer. Backup the file you just created to a secure location.</li>
+							<li id="bulklabela2li2">Import the groestlcoin addresses into a database table on your web server. (Don't put the wallet/private keys on your web server, otherwise you risk hackers stealing your coins. Just the groestlcoin addresses as they will be shown to customers.)</li>
+							<li id="bulklabela2li3">Provide an option on your website's shopping cart for your customer to pay in Groestlcoin. When the customer chooses to pay in Groestlcoin you will then display one of the addresses from your database to the customer as his "payment address" and save it with his shopping cart order.</li>
+							<li id="bulklabela2li4">You now need to be notified when the payment arrives. Google "groestlcoin payment notification" and subscribe to at least one groestlcoin payment notification service. There are various services that will notify you via Web Services, API, SMS, Email, etc. Once you receive this notification, which could be programmatically automated, you can process the customer's order. To manually check if a payment has arrived you can use Block Explorer. Replace THEADDRESSGOESHERE with the groestlcoin address you are checking. It could take between 10 minutes to one hour for the transaction to be confirmed.<br />http://www.blockexplorer.com/address/THEADDRESSGOESHERE<br /><br />Unconfirmed transactions can be viewed at: http://blockchain.info/ <br />You should see the transaction there within 30 seconds.</li>
+							<li id="bulklabela2li5">Groestlcoins will safely pile up on the block chain. Use the original wallet file you generated in step 1 to spend them.</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="brainarea" class="walletarea">
+				<div id="braincommands" class="commands">
+					<div class="row">
+						<span id="brainlabelenterpassphrase" class="label"><label for="brainpassphrase">Enter Passphrase: </label></span>
+						<input tabindex="1" type="password" id="brainpassphrase" value="" onfocus="this.select();" onkeypress="if (event.keyCode == 13) ninja.wallets.brainwallet.view();" />
+						<span><label id="brainlabelshow" for="brainpassphraseshow">Show?</label> <input type="checkbox" id="brainpassphraseshow" onchange="ninja.wallets.brainwallet.showToggle(this);" /></span>
+						<span class="print"><input type="button" name="print" id="brainprint" value="Print" onclick="window.print();" /></span>
+					</div>
+					<div class="row extra">
+						<span class="label" id="brainlabelconfirm"><label for="brainpassphraseconfirm">Confirm Passphrase: </label></span>
+						<input tabindex="2" type="password" id="brainpassphraseconfirm" value="" onfocus="this.select();" onkeypress="if (event.keyCode == 13) ninja.wallets.brainwallet.view();" />
+						<span><input tabindex="3" type="button" id="brainview" value="View" onclick="ninja.wallets.brainwallet.view();" /></span>
+						<span id="brainalgorithm" class="notes right">Algorithm: SHA256(passphrase)</span>
+					</div>
+					<div class="row extra"><span id="brainwarning"></span></div>
+				</div>
+				<div id="brainkeyarea" class="keyarea">
+					<div class="public">
+						<div id="brainqrcodepublic" class="qrcode_public"></div>
+						<div class="pubaddress">
+							<span class="label" id="brainlabelbitcoinaddress">Groestlcoin Address:</span>
+							<span class="output" id="brainbtcaddress"></span>
+						</div>
+					</div>
+					<div class="private">
+						<div id="brainqrcodeprivate" class="qrcode_private"></div>
+						<div class="privwif">
+							<span class="label" id="brainlabelprivatekey">Private Key (Wallet Import Format):</span>
+							<span class="output" id="brainbtcprivwif"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="vanityarea" class="walletarea">
+				<div id="vanitystep1label" class="commands expandable" onclick="ninja.wallets.vanitywallet.openCloseStep(1);">
+					<span><label id="vanitylabelstep1">Step 1 - Generate your "Step1 Key Pair"</label> <input type="button" id="vanitynewkeypair" 
+						value="Generate" onclick="ninja.wallets.vanitywallet.generateKeyPair();" /></span>
+					<div id="vanitystep1icon" class="more"></div>
+				</div>
+				<div id="vanitystep1area">
+					<div>
+						<span class="label" id="vanitylabelstep1publickey">Step 1 Public Key:</span>
+						<div class="output pubkeyhex" id="vanitypubkey"></div>
+						<br /><div class="notes" id="vanitylabelstep1pubnotes">Copy and paste the above into the Your-Part-Public-Key field in the Vanity Pool Website.</div>
+					</div>
+					<div>
+						<span class="label" id="vanitylabelstep1privatekey">Step 1 Private Key:</span>
+						<span class="output" id="vanityprivatekey"></span>
+						<br /><div class="notes" id="vanitylabelstep1privnotes">Copy and paste the above Private Key field into a text file. Ideally save to an encrypted drive. You will need this to retrieve the Groestlcoin Private Key once the Pool has found your prefix.</div>
+					</div>
+				</div>
+				<div id="vanitystep2label" class="expandable" onclick="ninja.wallets.vanitywallet.openCloseStep(2);">
+					<span id="vanitylabelstep2calculateyourvanitywallet">Step 2 - Calculate your Vanity Wallet</span>
+					<div id="vanitystep2icon" class="more"></div>
+				</div>
+				<div id="vanitystep2inputs">
+					<div>
+						<span id="vanitylabelenteryourpart">Enter Your Part Private Key (generated in Step 1 above and previously saved):</span>
+						<br /><span class="notes" id="vanitylabelnote1">[NOTE: this input box can accept a public key or private key]</span>
+					</div>
+					<div><textarea id="vanityinput1" rows="2" cols="90" onfocus="this.select();"></textarea></div>
+					<div>
+						<span id="vanitylabelenteryourpoolpart">Enter Pool Part Private Key (from Vanity Pool):</span>
+						<br /><span class="notes" id="vanitylabelnote2">[NOTE: this input box can accept a public key or private key]</span>
+					</div>
+					<div><textarea id="vanityinput2" rows="2" cols="90" onfocus="this.select();"></textarea></div>
+					<div>
+						<label for="vanityradioadd" id="vanitylabelradioadd">Add</label> <input type="radio" id="vanityradioadd" name="vanityradio" value="add" checked />
+						<label for="vanityradiomultiply" id="vanitylabelradiomultiply">Multiply</label> <input type="radio" id="vanityradiomultiply" name="vanityradio" value="multiply" />
+					</div>
+					<div><input type="button" id="vanitycalc" value="Calculate Vanity Wallet" onclick="ninja.wallets.vanitywallet.addKeys();" /></div>
+				</div>
+				<div id="vanitystep2area">
+					<div>
+						<span class="label" id="vanitylabelbitcoinaddress">Vanity Groestlcoin Address:</span>
+						<span class="output" id="vanityaddress"></span>
+						<br /><div class="notes" id="vanitylabelnotesbitcoinaddress">The above is your new address that should include your required prefix.</div>
+					</div>
+					
+					<div>
+						<span class="label" id="vanitylabelpublickeyhex">Vanity Public Key (HEX):</span>
+						<span class="output pubkeyhex" id="vanitypublickeyhex"></span>
+						<br /><div class="notes" id="vanitylabelnotespublickeyhex">The above is the Public Key in hexadecimal format. </div>
+					</div>
+
+					<div>
+						<span class="label" id="vanitylabelprivatekey">Vanity Private Key (WIF):</span>
+						<span class="output" id="vanityprivatekeywif"></span>
+						<br /><div class="notes" id="vanitylabelnotesprivatekey">The above is the Private Key to load into your wallet. </div>
+					</div>
+				</div>
+			</div>
+
+			<div id="detailarea" class="walletarea">	
+				<div id="detailcommands" class="commands">
+					<span><label id="detaillabelenterprivatekey" for="detailprivkey">Enter Private Key</label></span>
+					<input type="text" id="detailprivkey" value="" onfocus="this.select();" onkeypress="if (event.keyCode == 13) ninja.wallets.detailwallet.viewDetails();" />
+					<span><input type="button" id="detailview" value="View Details" onclick="ninja.wallets.detailwallet.viewDetails();" /></span>
+					<span class="print"><input type="button" name="print" id="detailprint" value="Print" onclick="window.print();" /></span>
+					<div class="row extra">
+						<span><label id="detailkeyformats">Key Formats: WIF, WIFC, HEX, B64, B6, MINI, BIP38</label></span>
+					</div>
+					<div id="detailbip38commands">
+						<span><label id="detaillabelpassphrase">Enter BIP38 Passphrase</label> <input type="text" id="detailprivkeypassphrase" value="" onfocus="this.select();" onkeypress="if (event.keyCode == 13) ninja.wallets.detailwallet.viewDetails();" /></span>
+						<span><input type="button" id="detaildecrypt" value="Decrypt BIP38" onclick="ninja.wallets.detailwallet.viewDetails();" /></span>
+					</div>
+				</div>
+				<div id="detailkeyarea">
+					<div class="notes">
+						<span id="detaillabelnote1">Your Groestlcoin Private Key is a unique secret number that only you know. It can be encoded in a number of different formats. Below we show the Groestlcoin Address and Public Key that corresponds to your Private Key as well as your Private Key in the most popular encoding formats (WIF, WIFC, HEX, B64, MINI).</span>
+						<br /><br />
+						<span id="detaillabelnote2">Groestlcoin v0.6+ stores public keys in compressed format. The client now also supports import and export of private keys with importprivkey/dumpprivkey. The format of the exported private key is determined by whether the address was generated in an old or new wallet.</span>
+					</div>
+					<div class="pubqr">
+						<div class="item">
+							<span class="label" id="detaillabelbitcoinaddress">Groestlcoin Address</span>
+							<div id="detailqrcodepublic" class="qrcode_public"></div>
+							<span class="output" id="detailaddress"></span>
+						</div>					
+						<div class="item right">
+							<span class="label" id="detaillabelbitcoinaddresscomp">Groestlcoin Address Compressed</span>
+							<div id="detailqrcodepubliccomp" class="qrcode_public"></div>
+							<span class="output" id="detailaddresscomp"></span>
+						</div>
+					</div>
+					<br /><br />
+					<div class="item clear">
+						<span class="label" id="detaillabelpublickey">Public Key (130 characters [0-9A-F]):</span>
+						<span class="output pubkeyhex" id="detailpubkey"></span>
+					</div>
+					<div class="item">
+						<span class="label" id="detaillabelpublickeycomp">Public Key (compressed, 66 characters [0-9A-F]):</span>
+						<span class="output" id="detailpubkeycomp"></span>
+					</div>
+					<hr />
+					<div class="privqr">
+						<div class="item">
+							<span class="label"><span id="detaillabelprivwif">Private Key WIF<br />51 characters base58, starts with a</span> <span id="detailwifprefix">'5'</span></span>
+							<div id="detailqrcodeprivate" class="qrcode_private"></div>
+							<span class="output" id="detailprivwif"></span>
+						</div>
+						<div class="item right">
+							<span class="label"><span id="detaillabelprivwifcomp">Private Key WIF Compressed<br />52 characters base58, starts with a</span> <span id="detailcompwifprefix">'K' or 'L'</span></span>
+							<div id="detailqrcodeprivatecomp" class="qrcode_private"></div>
+							<span class="output" id="detailprivwifcomp"></span>
+						</div>
+					</div>
+					<br /><br />
+					<div class="item clear">
+						<span class="label" id="detaillabelprivhex">Private Key Hexadecimal Format (64 characters [0-9A-F]):</span>
+						<span class="output" id="detailprivhex"></span>
+					</div>
+					<div class="item">
+						<span class="label" id="detaillabelprivb64">Private Key Base64 (44 characters):</span>
+						<span class="output" id="detailprivb64"></span>
+					</div>
+					<div class="item" style="display: none;" id="detailmini">
+						<span class="label" id="detaillabelprivmini">Private Key Mini Format (22, 26 or 30 characters, starts with an 'S'):</span>
+						<span class="output" id="detailprivmini"></span>
+					</div>
+					<div class="item" style="display: none;" id="detailb6">
+						<span class="label" id="detaillabelprivb6">Private Key Base6 Format (99 characters [0-5]):</span>
+						<span class="output" id="detailprivb6"></span>
+					</div>
+					<div class="item" style="display: none;" id="detailbip38">
+						<span class="label" id="detaillabelprivbip38">Private Key BIP38 Format (58 characters base58, starts with '6P'):</span>
+						<span class="output" id="detailprivbip38"></span>
+					</div>
+				</div>
+				<div class="faqs">
+					<div id="detailfaq1" class="faq"> 
+						<div id="detailq1" class="question" onclick="ninja.wallets.detailwallet.openCloseFaq(1);">
+							<span id="detaillabelq1">How do I make a wallet using dice? What is B6?</span>
+							<div id="detaile1" class="more"></div>
+						</div>
+						<div id="detaila1" class="answer">An important part of creating a Groestlcoin wallet is ensuring the random numbers used to create the wallet are truly random. Physical randomness is better than computer generated pseudo-randomness. The easiest way to generate physical randomness is with dice. To create a Groestlcoin private key you only need one six sided die which you roll 99 times. Stopping each time to record the value of the die. When recording the values follow these rules: 1=1, 2=2, 3=3, 4=4, 5=5, 6=0. By doing this you are recording the big random number, your private key, in B6 or base 6 format. You can then enter the 99 character base 6 private key into the text field above and click View Details. You will then see the Groestlcoin address associated with your private key. You should also make note of your private key in WIF format since it is more widely used.</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="footer" class="footer">
+			<div class="authorbtc">
+				<div>
+					<span class="item"><span id="footerlabeldonations">Donations to bitaddress.org developer:</span> <b>1NiNja</b>1bUmhSoTXozBRBEtR8LeF9TGbZBN</span>
+					<span class="item"></span>
+					<span class="item" id="footerlabeltranslatedby"></span>
+				</div>
+			</div>
+			<div class="authorpgp">
+				<span class="item">
+					<a href="https://github.com/pointbiz/bitaddress.org/releases/tag/v2.8.1" target="_blank"><span id="footerlabelversion">Based on bitaddress.org v2.8.1</a>
+				</span>
+				<span class="item"><a href="https://github.com/GroestlCoin/PaperWallet" target="_blank" id="footerlabelgithub">GitHub Repository</a></span>
+			</div>
+			<div class="copyright">
+				<span id="footerlabelcopyright1">Copyright bitaddress.org, Groestlcoin developers.</span>
+				<span id="footerlabelcopyright2">JavaScript copyrights are included in the source.</span>
+				<span id="footerlabelnowarranty">No warranty.</span>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+//ninja.key.js
+	</script>
+	<script type="text/javascript">
+//ninja.misc.js
+	</script>
+	<script type="text/javascript">
+//ninja.translator.js
+	</script>
+	<script type="text/javascript">
+//ninja.singlewallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.paperwallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.bulkwallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.brainwallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.vanitywallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.detailwallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.unittests.js
+	</script>
+	<script type="text/javascript">
+//ninja.onload.js
+	</script>
+</body>
+</html>
