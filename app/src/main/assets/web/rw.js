@@ -16,17 +16,22 @@ rush = window.rush = {
     "gpgKeys": Array(),
     "gpgPage": Array(),
     "price": 0,
+    "currency": "USD",
     "useFiat": false,
     "useFiat2": false,
     "firstTime":false,
     "currency": "USD",
-    "currencyOptions": ["CNY","EUR","GBP","JPY","RUB","USD"],
+    "currencyOptions": ["AUD","BRL","CAD","CHF","CNY","DKK","EUR","GBP","HKD","INR", "ISK", "JPY","KRW","NZD","PLN","RUB","SEK","SGD","THB","TWD","USD","ZAR"],
     "sweeping":"",
     "getBalanceBlock": false,
     "chartLoaded": false,
 
     "open": function ()
     {
+        if (typeof Android !== "undefined") {
+            Android.showToast("Make sure you save your Private Keys somewhere safe. Go to Settings -> Export Private Keys to display them.");
+        }
+
         $("#settings").show();
 
         if ( readCookie("currency") != "" )
@@ -40,7 +45,7 @@ rush = window.rush = {
         }
 
         //is invoice wallet?
-        invoices = localStorage.invoices;
+        /*invoices = localStorage.invoices;
 
         if ( invoices && invoices != '[]' )
         {
@@ -55,7 +60,7 @@ rush = window.rush = {
                     break;
                 }
             }
-        }
+        }*/
 
         //
 
@@ -137,26 +142,27 @@ rush = window.rush = {
         */
 
         url = "http://jswallet.groestlcoin.org/?z=" + ( Math.floor(Math.random() * 9999999) + 1 ) + "#" + rush.passcode + "&{CODE}";
-        url2="zxing://scan/?ret=" + encodeURIComponent( url ) + "&SCAN_FORMATS=QR";
-        $("#qrlink").attr("href", url2);
+       // url2="zxing://scan/?ret=" + encodeURIComponent( url ) + "&SCAN_FORMATS=QR";
+        //$("#qrlink").attr("href", url2);
+        $("#qrlink").attr('href', '#');
 
 
         if ( rush.firstTime )
         {
-            $("#saveURLHolder, #saveURL").show();
+        /*    $("#saveURLHolder, #saveURL").show();
 
             setTimeout( function()
             {
                 $("#saveURL").slideUp();
 
             }, 7000);
-
-            ga( "send", "event", "Create", "Wallet" );
+*/
+          //  ga( "send", "event", "Create", "Wallet" );
 
         }        
         else
         {
-            ga( "send", "event", "Open", "Wallet" );
+           // ga( "send", "event", "Open", "Wallet" );
 
         }
     
@@ -176,7 +182,10 @@ rush = window.rush = {
             rush.getFiatPrice();
         }, 300000);
 
-
+        setInterval( function()
+        {
+            rush.getBalance();
+        }, 120000);
     },
 
    
@@ -315,7 +324,7 @@ rush = window.rush = {
         this.txDest = rush.address;
 
 
-        var url = "getBalance/"+ this.address;
+        var url = "http://jswallet.groestlcoin.org/getBalance/"+ this.address;
 
 
         rush.sweeping = rush.address;
@@ -474,7 +483,7 @@ rush = window.rush = {
             return false;
         }
 
-        ga( "send", "event", "Invoice", "Create" );
+//        ga( "send", "event", "Invoice", "Create" );
 
 
         var bytes = Bitcoin.Crypto.SHA256(Bitcoin.Crypto.SHA256(this.passcode + "_" + $("#txtInvoiceID").val()) ,
@@ -631,7 +640,7 @@ rush = window.rush = {
     },
     "getHistory": function ()
     {
-        var url = "txs/" + this.address;
+        var url = "http://jswallet.groestlcoin.org/txs/" + this.address;
 
         $("#txTable tbody").html("");
 
@@ -688,7 +697,7 @@ rush = window.rush = {
     },
     "getUnconfirmed": function ()
     {
-        var url = "/unconfirmed/" + this.address;
+        var url = "http://jswallet.groestlcoin.org/unconfirmed/" + this.address;
 
         $.ajax(
         {
@@ -838,7 +847,7 @@ rush = window.rush = {
     },
     "getBalance": function ()
     {
-        var url = "getBalance/"+ this.address;
+        var url = "http://jswallet.groestlcoin.org/getBalance/"+ this.address;
 
         $.ajax(
         {
@@ -860,7 +869,7 @@ rush = window.rush = {
                 spendable = 0;
 
             $("#btcBalance").html( btcFormat( rush.balance ) );
-            $("#spendable").html("à¸¿" + btcFormat( spendable ) );
+            $("#spendable").html("฿" + btcFormat( spendable ) );
 
             rush.getFiatPrice();
 
@@ -875,18 +884,43 @@ rush = window.rush = {
     {
         switch ( this.currency )
         {
+            case "AUD":
             case "USD":
-		  return "$";
+            case "CAD":
+            case "CLP":
+            case "HKD":
+            case "NZD":
+            case "SGD":
+                return "$";
+                break;
+            case "BRL":
+                return "R$"; 
             case "CNY":
-                return "Â¥";            
+                return "¥";            
+            case "DKK":
+                return "kr";
             case "EUR":
-                return "â‚¬";            
+                return "€";            
             case "GBP":
-                return "Â£";            
+                return "£";            
+            case "INR":
+                return "";
+            case "ISK":
+                return "kr";            
             case "JPY":
-                return "Â¥";
+                return "¥";
+            case "KRW":
+                return "₩";            
+            case "PLN":
+                return "zł";
             case "RUB":
-                return "Ñ€ÑƒÐ± ";            
+                return "руб ";            
+            case "SEK":
+                return "kr ";
+            case "TWD":
+                return "NT$";
+            case "THB":
+                return "T฿";
 
             default:
                 return "$";
@@ -906,7 +940,7 @@ rush = window.rush = {
 
         $.ajax({
             type: "GET",
-            url: "ticker",
+            url: "http://jswallet.groestlcoin.org/ticker",
             async: true,
             cache : false,
             data: {},
@@ -914,20 +948,22 @@ rush = window.rush = {
 
         }).done(function (msg) {
             
+            if(msg[currency]) {
 
-            price = msg[currency].last;
+                price = msg[currency].last;
 
-            rush.price = price;
+                rush.price = price;
 
-            price = price.toFixed(2);
+                price = price.toFixed(2);
 
-            $("#price").html(rush.getFiatPrefix()+formatMoney(price) ).show();
+                $("#price").html(rush.getFiatPrefix()+formatMoney(price) ).show();
 
-            $("#currencyValue").html( rush.currency );
+                $("#currencyValue").html( rush.currency );
 
-            $(".currency").animate({opacity:1});
+                $(".currency").animate({opacity:1});
 
-            rush.getFiatValue();
+                rush.getFiatValue();
+            }
 
 
         });
@@ -950,7 +986,7 @@ rush = window.rush = {
         {
             var btcValue = amount / this.price;
             btcValue = btcFormat( btcValue );
-            $("#fiatPrice").html("(à¸¿" + btcValue + ")");
+            $("#fiatPrice").html("(฿" + btcValue + ")");
 
         }
         else
@@ -980,7 +1016,7 @@ rush = window.rush = {
         {
             var btcValue = amount / this.price;
             btcValue = btcFormat( btcValue );
-            $("#fiatPrice2").html("(à¸¿" + btcValue + ")");
+            $("#fiatPrice2").html("(฿" + btcValue + ")");
 
         }
         else
@@ -1023,7 +1059,7 @@ rush = window.rush = {
     "txComplete": function ()
     {
   
-        ga( "send", "event", "Send", "Wallet" );
+//        ga( "send", "event", "Send", "Wallet" );
 
         setMsg("Payment sent!", true);
 
