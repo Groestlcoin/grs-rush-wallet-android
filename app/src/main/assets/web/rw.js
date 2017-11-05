@@ -884,6 +884,7 @@ rush = window.rush = {
         switch ( this.currency )
         {
             case "USD":
+                return "$";
             case "CNY":
                 return "¥";            
             case "EUR":
