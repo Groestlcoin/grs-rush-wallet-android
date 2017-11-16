@@ -20,7 +20,7 @@ rush = window.rush = {
     "useFiat2": false,
     "firstTime":false,
     "currency": "USD",
-    "currencyOptions": ["CNY","EUR","GBP","JPY","RUB","USD"],
+    "currencyOptions": ["AUD","BRL","CAD","CHF","CNY","DKK","EUR","GBP","HKD","INR", "ISK", "JPY","KRW","NZD","PLN","RUB","SEK","SGD","THB","TWD","USD","ZAR"], 
     "sweeping":"",
     "getBalanceBlock": false,
     "chartLoaded": false,
@@ -883,19 +883,44 @@ rush = window.rush = {
     {
         switch ( this.currency )
         {
+            case "AUD":
             case "USD":
+            case "CAD":
+            case "CLP":
+            case "HKD":
+            case "NZD":
+            case "SGD":
                 return "$";
+                break;
+            case "BRL":
+                return "R$"; 
             case "CNY":
                 return "¥";            
+            case "DKK":
+                return "kr";
             case "EUR":
                 return "€";            
             case "GBP":
                 return "£";            
+            case "INR":
+                return "";
+            case "ISK":
+                return "kr";            
             case "JPY":
                 return "¥";
+            case "KRW":
+                return "₩";            
+            case "PLN":
+                return "zł";
             case "RUB":
                 return "руб ";            
-         
+            case "SEK":
+                return "kr ";
+            case "TWD":
+                return "NT$";
+            case "THB":
+                return "T฿";
+
             default:
                 return "$";
         }
