@@ -779,11 +779,11 @@ $(document).ready(function ()
         entroMouse.mouseInside = true;
     }); 
 
-   /*$(document).on("click", '#changeType', function (e)
+   $(document).on("click", '#changeType', function (e)
     {
-        if ( $("#changeType .addonBox").html() != "฿" )
+        if ( $("#changeType .addonBox").html() != "Ç¤" )
         {
-            $("#changeType .addonBox").html("฿");
+            $("#changeType .addonBox").html("Ç¤");
             rush.useFiat = false;
             rush.amountFiatValue();
             if ( !mobilecheck() )
@@ -801,9 +801,9 @@ $(document).ready(function ()
 
     $(document).on("click", '#changeType2', function (e)
     {
-        if ( $("#changeType2 .addonBox2").html() != "฿" )
+        if ( $("#changeType2 .addonBox2").html() != "Ç¤" )
         {
-            $("#changeType2 .addonBox2").html("฿");
+            $("#changeType2 .addonBox2").html("Ç¤");
             rush.useFiat2 = false;
             rush.amountFiatValue2();
             if ( !mobilecheck() )
@@ -817,7 +817,7 @@ $(document).ready(function ()
             if ( !mobilecheck() )
                 $("#txtReceiveAmount").focus();
         }
-    });*/
+    });
 
     $(document).on("mouseleave", '#tapBox', function (e)
     {
