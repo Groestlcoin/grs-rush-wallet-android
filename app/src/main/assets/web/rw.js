@@ -868,7 +868,7 @@ rush = window.rush = {
                 spendable = 0;
 
             $("#btcBalance").html( btcFormat( rush.balance ) );
-            $("#spendable").html("&#484;" + btcFormat( spendable ) );
+            $("#spendable").html("Ç¤" + btcFormat( spendable ) );
 
             rush.getFiatPrice();
 
@@ -985,7 +985,7 @@ rush = window.rush = {
         {
             var btcValue = amount / this.price;
             btcValue = btcFormat( btcValue );
-            $("#fiatPrice").html("&#484;" + btcValue + ")");
+            $("#fiatPrice").html("Ç¤" + btcValue + ")");
 
         }
         else
@@ -1015,7 +1015,7 @@ rush = window.rush = {
         {
             var btcValue = amount / this.price;
             btcValue = btcFormat( btcValue );
-            $("#fiatPrice2").html("&#484;" + btcValue + ")");
+            $("#fiatPrice2").html("Ç¤" + btcValue + ")");
 
         }
         else
